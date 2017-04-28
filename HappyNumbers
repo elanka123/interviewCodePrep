@@ -1,0 +1,100 @@
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.testng.annotations.Test;
+
+public class HappyNumbers {
+
+    public boolean isHappy(int n) {
+        Set<Integer> set = new<Integer> HashSet();
+        //set.add(n);
+        return isHappyRecursion(n, set);
+    }
+
+    public boolean isHappyRecursion(int n, Set<Integer> setInOut) {
+        if (squaredNumbersSum(n) == 1) {
+            System.out.println("if  " + squaredNumbersSum(n));
+            return true;
+        } else if (!setInOut.add(n)) {
+            System.out.println("else if  infinite loop");
+            return false;
+        } else if (squaredNumbersSum(n) == -1) {
+            return false;
+
+        } else {
+            System.out.println("else " + squaredNumbersSum(n));
+            return isHappyRecursion(squaredNumbersSum(n), setInOut);
+        }
+    }
+
+    public int squaredNumbersSum(int numToSplitte) {
+        int sum = 0;
+        while (numToSplitte >= 10) {
+            sum += (numToSplitte % 10) * (numToSplitte % 10);
+            numToSplitte = numToSplitte / 10;
+        }
+        int maxIntValue = 2147483647;
+        if ((maxIntValue - (numToSplitte * numToSplitte)) == sum) {
+            sum = ((numToSplitte * numToSplitte) + 1) * (-1);
+        }
+        sum += numToSplitte * numToSplitte;
+        return sum;
+    }
+
+
+
+    
+    //Tests
+    
+    @Test(enabled = true)
+    public void testisHappyValid() {
+        boolean actual = isHappy(19);
+        assertTrue(actual);
+    }
+
+   @Test(enabled = true)
+    public void testisHappyInfinite() {
+        boolean actual = isHappy(5);
+        assertTrue(!actual);
+    }
+
+    @Test(enabled = true)
+    public void testisHappyUnhappy() {
+        boolean actual = isHappy(3);
+        assertTrue(!actual);
+    }
+
+    @Test(enabled = true)
+    public void testisHappyZero() {
+        boolean actual = isHappy(0);
+        assertTrue(!actual);
+    }
+
+    @Test(enabled = true)
+    public void testisHappyOne() {
+        boolean actual = isHappy(1);
+        assertTrue(actual);
+    }
+
+    @Test(enabled = false)
+    public void testsquaredNumbersSum100() {
+        int actual = squaredNumbersSum(233);
+        assertEquals(actual, 22);
+    }
+
+    @Test(enabled = false)
+    public void testsquaredNumbersSum10() {
+        int actual = squaredNumbersSum(82);
+        assertEquals(actual, 68);
+    }
+
+    @Test(enabled = false)
+    public void testsquaredNumbersSum1() {
+        int actual = squaredNumbersSum(2);
+        assertEquals(actual, 4);
+    }
+
+}
